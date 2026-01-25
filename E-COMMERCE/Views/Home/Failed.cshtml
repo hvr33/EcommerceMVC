@@ -1,0 +1,24 @@
+﻿@model Order
+@{
+    ViewData["Title"] = "فشل الدفع";
+}
+
+<div class="container mt-5">
+    <div class="alert alert-danger text-center">
+        <h3>فشل الدفع!</h3>
+        <p>عذراً، لم يتم إتمام الدفع. يمكنك إعادة المحاولة لاحقاً.</p>
+    </div>
+
+    <div class="card p-3 mb-4">
+        <p><strong>رقم الطلب:</strong> @Model.Id</p>
+        <p><strong>الاسم:</strong> @Model.CustomerName</p>
+        <p><strong>المنتجات:</strong></p>
+        <ul>
+            @foreach (var item in Model.Orderdetials)
+            {
+                <li>@item.Product?.Name - @item.Quantity × @item.Price = @item.Totalprice</li>
+            }
+        </ul>
+        <p><strong>المبلغ الإجمالي:</strong> @Model.Orderdetials.Sum(od => od.Totalprice)</p>
+    </div>
+</div>

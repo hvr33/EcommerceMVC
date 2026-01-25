@@ -1,0 +1,12 @@
+﻿{
+  "Extends": "defaults@6.6.0",
+  "RootNamespace": "Serene3",
+  "FileScopedNamespaces": true,
+  "ServerTypings": {
+    "LocalTexts": true
+  },
+  "UpgradeInfo": {
+    "InitialType": "Community",
+    "InitialVersion": "9.0.0.0"
+  }
+}

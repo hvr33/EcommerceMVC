@@ -1,0 +1,44 @@
+﻿@model E_COMMERCE.ViewModels.SystemSettingsViewModel
+
+@{
+    ViewData["Title"] = "إعدادات النظام";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="UpdateSystemSettings" method="post">
+    <div class="mb-3">
+        <label>اسم المتجر</label>
+        <input asp-for="StoreName" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>البريد الإلكتروني للدعم</label>
+        <input asp-for="SupportEmail" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>رقم الهاتف</label>
+        <input asp-for="PhoneNumber" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>عنوان المتجر</label>
+        <input asp-for="StoreAddress" class="form-control" />
+    </div>
+    <div class="mb-3 form-check">
+        <input asp-for="MaintenanceMode" class="form-check-input" />
+        <label asp-for="MaintenanceMode" class="form-check-label">وضع الصيانة</label>
+    </div>
+    <div class="mb-3">
+        <label>رسالة الصيانة</label>
+        <input asp-for="MaintenanceMessage" class="form-control" />
+    </div>
+    <div class="mb-3 form-check">
+        <input asp-for="CashOnDeliveryEnabled" class="form-check-input" />
+        <label asp-for="CashOnDeliveryEnabled" class="form-check-label">الدفع عند الاستلام</label>
+    </div>
+    <div class="mb-3">
+        <label>الحد الأدنى للطلب</label>
+        <input asp-for="MinimumOrderValue" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">حفظ الإعدادات</button>
+</form>

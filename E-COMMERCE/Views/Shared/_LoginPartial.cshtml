@@ -1,0 +1,134 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@using E_COMMERCE.Areas.Identity.Data
+@* 
+@inject SignInManager<E_COMMERCEUser> SignInManager
+@inject UserManager<E_COMMERCEUser> UserManager
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item">
+        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+            Hello @UserManager.GetUserName(User)!
+        </a>
+    </li>
+    <li class="nav-item">
+        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
+        </form>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    </li> *
+@* } 
+@*  @using Microsoft.AspNetCore.Identity
+@using E_COMMERCE.Areas.Identity.Data *@
+@* @inject SignInManager<E_COMMERCEUser> SignInManager
+@inject UserManager<E_COMMERCEUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-dark fw-bold" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle me-1"></i> Hello, @UserManager.GetUserName(User)!
+        </a> *@
+        @* <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-3 border-0" aria-labelledby="userDropdown" style="min-width: 220px;"> *@
+
+            @* لوحة تحكم الأدمن *@
+            @* @if (User.IsInRole("Admin"))
+            {
+                <li>
+                    <a class="dropdown-item d-flex align-items-center gap-2" asp-controller="Admin" asp-action="Index">
+                        <i class="bi bi-speedometer2"></i> لوحة تحكم الأدمن
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+            }
+
+            <li>
+                <a class="dropdown-item d-flex align-items-center gap-2" asp-area="Identity" asp-page="/Account/Manage/ExternalLogins">
+                    <i class="bi bi-box-arrow-in-right"></i> External Logins
+                </a>
+            </li>
+
+            <li>
+                <a class="dropdown-item d-flex align-items-center gap-2" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage Account"> *@
+@*                     <i class="bi bi-person-gear"></i> Manage Account
+                </a>
+            </li>
+
+            <li><hr class="dropdown-divider"></li>
+
+            <li>
+                <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home")">
+                    <button type="submit" class="dropdown-item text-danger d-flex align-items-center gap-2">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </li>
+}
+else
+{
+    <li class="nav-item d-flex gap-2">
+        <a class="nav-link btn btn-outline-primary fw-bold rounded-pill px-3 d-flex align-items-center gap-2" id="register" asp-area="Identity" asp-page="/Account/Register">
+            <i class="bi bi-person-plus text-primary"></i> Register
+        </a>
+        <a class="nav-link btn btn-primary text-white fw-bold rounded-pill px-3 d-flex align-items-center gap-2" id="login" asp-area="Identity" asp-page="/Account/Login">
+            <i class="bi bi-box-arrow-in-right text-white"></i> Login
+        </a>
+    </li>
+} *@
+@inject SignInManager<E_COMMERCEUser> SignInManager
+@inject UserManager<E_COMMERCEUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <a class="nav-link dropdown-toggle text-dark fw-bold" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-person-circle me-1"></i> Hello, @UserManager.GetUserName(User)!
+    </a>
+
+    <li class="nav-item d-flex gap-2">
+        @* زر لوحة تحكم الأدمن لو Admin *@
+        @if (User.IsInRole("Admin"))
+        {
+            <a class="nav-link btn btn-outline-dark fw-bold rounded-pill px-3" asp-controller="Admin" asp-action="Index">
+                <i class="bi bi-speedometer2"></i> لوحة تحكم الأدمن
+            </a>
+            <a class="nav-link btn btn-outline-primary fw-bold rounded-pill px-3" asp-area="Identity" asp-page="/Account/Manage/Index">
+                <i class="bi bi-person-gear"></i> Manage Account
+            </a>
+        }
+
+        <a class="nav-link btn btn-outline-primary fw-bold rounded-pill px-3" asp-area="Identity" asp-page="/Account/Manage/ExternalLogins">
+            <i class="bi bi-box-arrow-in-right"></i> External Logins
+        </a>
+
+       
+
+        <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home")" class="m-0">
+            <button type="submit" class="nav-link btn btn-danger fw-bold rounded-pill px-3">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </button>
+        </form>
+    </li>
+}
+else
+{
+    <li class="nav-item d-flex gap-2">
+        <a class="nav-link btn btn-outline-primary fw-bold rounded-pill px-3" asp-area="Identity" asp-page="/Account/Register">
+            <i class="bi bi-person-plus"></i> Register
+        </a>
+        <a class="nav-link btn btn-primary text-white fw-bold rounded-pill px-3" asp-area="Identity" asp-page="/Account/Login">
+            <i class="bi bi-box-arrow-in-right"></i> Login
+        </a>
+    </li>
+}

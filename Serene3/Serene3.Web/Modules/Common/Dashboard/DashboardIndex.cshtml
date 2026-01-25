@@ -1,0 +1,487 @@
+@* @model Serene3.Common.DashboardPageModel
+@inject ITextLocalizer Localizer
+@{
+    ViewData["Title"] = "Dashboard";
+ViewData["PageId"] = "Dashboard";
+}
+
+@section Head {
+@Html.StyleBundle("Pages/Dashboard")
+@Html.ScriptBundle("Pages/Dashboard")
+}
+
+@section ContentHeader {
+    <h1>@Localizer.Get("Navigation.Dashboard")</h1>
+}
+
+<style>
+.s-dashboard-card, .s-dashboard-card-sm {
+    margin-bottom: var(--bs-gutter-x);
+}
+
+.s-dashboard-card .card-header {
+    padding: 1rem;
+    border-bottom: none;
+    background-color: transparent;
+}
+
+.s-dashboard-card .card-body {
+    border-radius: 0 0 4px 4px;
+    padding: 1rem;
+}
+
+.s-dashboard-card .card-footer {
+    border-top-color: transparent;
+    background-color: transparent;
+    padding: 1rem;
+}
+
+.s-dashboard-card .card-title {
+    margin: 0;
+    font-size: 1.4rem;
+    color: var(--s-table-title);
+}
+
+.s-dashboard-card-sm .card-body {
+    padding: 1rem;
+    border-radius: 4px 4px 0 0;
+    margin: 1px;
+}
+
+.s-dashboard-card-sm .card-footer {
+    color: rgba(var(--s-bright-rgb), 0.8);
+    background-color: var(--bs-body-bg);
+    border-radius: 0 0 4px 4px;
+    border-top: none;
+    margin: 0 1px 1px 1px;
+    padding: 3px 0;
+    text-align: center;
+    text-decoration: none;
+}
+
+.s-dashboard-card-sm h3 {
+    font-size: 38px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    white-space: nowrap;
+    padding: 0;
+}
+
+.s-dashboard-card-sm p {
+    font-size: 15px;
+}
+
+.s-dashboard-card-sm p > small {
+    display: block;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.s-dashboard-card-sm .icon {
+    transition: all 0.3s linear;
+    position: absolute;
+    top: 13px;
+    color: #fff;
+    opacity: 0.9;
+    right: 10px;
+    font-size: 64px;
+}
+
+.bg-world-map {
+    background: #3c8dbc;
+}
+
+.s-dashboard-card-sm:hover .icon {
+    font-size: 70px;
+}
+
+#calendar .datepicker-inline {
+    width: 100%;
+}
+
+#calendar .datepicker-inline table {
+    width: 100%;
+}
+</style>
+
+
+<div class="row">
+    <div class="col-lg-3 col-sm-6">
+        <div class="card s-dashboard-card-sm bg-primary bg-opacity-50">
+            <div class="card-body">
+                <h3>@Model.OpenOrders</h3>
+                <p>Open Orders</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-shopping-cart"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-sm-6">
+        <div class="card s-dashboard-card-sm s-alt bg-info bg-opacity-50">
+            <div class="card-body">
+                <h3>@Model.ClosedOrderPercent<sup style="font-size: 20px">%</sup></h3>
+                <p>Closed Orders</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-truck"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-sm-6">
+        <div class="card s-dashboard-card-sm bg-warning bg-opacity-50">
+            <div class="card-body">
+                <h3>@Model.CustomerCount</h3>
+                <p>Total Customers</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-user-plus"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-sm-6">
+        <div class="card s-dashboard-card-sm s-alt bg-success bg-opacity-50">
+            <div class="card-body">
+                <h3>@Model.ProductCount</h3>
+                <p>Product Types</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-tag"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <section class="col-lg-7">
+        <div class="card s-dashboard-card">
+            <div class="card-body">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="header"><h3 class="card-title">Orders</h3></li>
+                    <li class="nav-item ms-auto"><a class="nav-link active" href="#orders-by-quarter-pane" data-bs-toggle="tab">By Quarter</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#orders-by-type-pane" data-bs-toggle="tab">By Type</a></li>
+                </ul>
+                <div class="tab-content no-padding">
+                    <div class="tab-pane fade show active" id="orders-by-quarter-pane">
+                        <canvas id="orders-by-quarter-chart" style="height: 280px;"></canvas>
+                    </div>
+                    <div class="tab-pane fade" id="orders-by-type-pane">
+                        <canvas id="orders-by-type-chart" style="height: 280px; width: 300px; margin: 0 auto;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card s-dashboard-card">
+            <div class="card-header d-flex">
+                <h3 class="card-title">Traffic &amp; Origin</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="traffic-chart" style="height: 266px;"></canvas>
+            </div>
+            <div class="card-footer no-border">
+                <div class="row">
+                    <div class="col-4 text-center" style="border-right: 1px solid #f4f4f4">
+                        <input type="text" class="knob" data-readonly="true" value="45" data-width="60" data-height="60" data-fgColor="#39a0ff" data-bgColor="#39a0ff50">
+                        <div class="knob-label">Search</div>
+                    </div>
+                    <div class="col-4 text-center" style="border-right: 1px solid #f4f4f4">
+                        <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60" data-fgColor="#39a0ff" data-bgColor="#39a0ff50">
+                        <div class="knob-label">Social</div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <input type="text" class="knob" data-readonly="true" value="35" data-width="60" data-height="60" data-fgColor="#39a0ff" data-bgColor="#39a0ff50">
+                        <div class="knob-label">Other</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="col-lg-5">
+        <div class="card s-dashboard-card bg-world-map">
+            <div class="card-header d-flex">
+                <h3 class="card-title text-white">
+                    <i class="fa fa-map-marker"></i> Visitors
+                </h3>
+                <div class="ms-auto s-dashboard-card-tools">
+                    <button class="btn btn-primary btn-sm daterange" data-toggle="tooltip" title="Date range"><i class="fa fa-calendar"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="world-map" style="height: 253px; width: 100%;"></div>
+            </div>
+            <div class="card-footer border-top-0">
+                <div class="row">
+                    <div class="col-4 text-center">
+                        <div id="sparkline-1"></div>
+                        <div class="knob-label text-white text-opacity-75">New Visitors</div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div id="sparkline-2"></div>
+                        <div class="knob-label text-white text-opacity-75">Online</div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div id="sparkline-3"></div>
+                        <div class="knob-label text-white text-opacity-75">Returning</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card s-dashboard-card">
+            <div class="card-body p-0">
+                <div id="calendar" style="width: 100%"></div>
+            </div>
+            <div class="card-footer py-4">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="clearfix">
+                            <span class="pull-left">Task #1</span>
+                            <small class="float-end">90%</small>
+                        </div>
+                        <div class="progress xs">
+                            <div class="progress-bar progress-bar-green" style="width: 90%;"></div>
+                        </div>
+                        <div class="clearfix">
+                            <span class="pull-left">Task #2</span>
+                            <small class="float-end">70%</small>
+                        </div>
+                        <div class="progress xs">
+                            <div class="progress-bar progress-bar-green" style="width: 70%;"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="clearfix">
+                            <span class="pull-left">Task #3</span>
+                            <small class="float-end">60%</small>
+                        </div>
+                        <div class="progress xs">
+                            <div class="progress-bar progress-bar-green" style="width: 60%;"></div>
+                        </div>
+                        <div class="clearfix">
+                            <span class="pull-left">Task #4</span>
+                            <small class="float-end">40%</small>
+                        </div>
+                        <div class="progress xs">
+                            <div class="progress-bar progress-bar-green" style="width: 40%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script nonce="@Html.CspNonce()">
+
+    // Doughnut Chart - Open vs Closed Orders
+    var ordersChart = new Chart(document.getElementById('ordersChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Open Orders', 'Closed Orders'],
+            datasets: [{
+                data: [@Model.OpenOrders, @Model.ClosedOrderPercent],
+                backgroundColor: ['#FF6384', '#36A2EB']
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    // Bar Chart - Customers vs Products
+    var custProdChart = new Chart(document.getElementById('custProdChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Customers', 'Products'],
+            datasets: [{
+                label: 'Count',
+                data: [@Model.CustomerCount, @Model.ProductCount],
+                backgroundColor: ['#4BC0C0', '#FFCE56']
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+
+        
+            
+    </script>
+
+
+                        *@
+@model Serene3.Common.DashboardPageModel
+@inject ITextLocalizer Localizer
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["PageId"] = "Dashboard";
+}
+
+@section Head {
+    @Html.StyleBundle("Pages/Dashboard")
+    @Html.ScriptBundle("Pages/Dashboard")
+}
+
+@section ContentHeader {
+    <h1>@Localizer.Get("Navigation.Dashboard")</h1>
+}
+
+<style>
+    .s-dashboard-card-sm {
+        margin-bottom: var(--bs-gutter-x);
+    }
+
+        .s-dashboard-card-sm .card-body {
+            padding: 1rem;
+            border-radius: 4px;
+        }
+
+        .s-dashboard-card-sm h3 {
+            font-size: 38px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .s-dashboard-card-sm p {
+            font-size: 15px;
+        }
+
+        .s-dashboard-card-sm .icon {
+            position: absolute;
+            top: 13px;
+            right: 10px;
+            font-size: 50px;
+            opacity: 0.3;
+        }
+</style>
+
+<!-- Cards -->
+<div class="row">
+    <div class="col-lg-3 col-sm-6">
+        <div class="card s-dashboard-card-sm bg-primary bg-opacity-50 position-relative">
+            <div class="card-body">
+                <h3>@Model.OpenOrders</h3>
+                <p>Open Orders</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-shopping-cart"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-sm-6">
+        <div class="card s-dashboard-card-sm bg-info bg-opacity-50 position-relative">
+            <div class="card-body">
+                <h3>@Model.ClosedOrderPercent<sup style="font-size: 20px">%</sup></h3>
+                <p>Closed Orders</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-truck"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-sm-6">
+        <div class="card s-dashboard-card-sm bg-warning bg-opacity-50 position-relative">
+            <div class="card-body">
+                <h3>@Model.CustomerCount</h3>
+                <p>Total Customers</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-user-plus"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-sm-6">
+        <div class="card s-dashboard-card-sm bg-success bg-opacity-50 position-relative">
+            <div class="card-body">
+                <h3>@Model.ProductCount</h3>
+                <p>Product Types</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-tag"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Dynamic Charts -->
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header"><h3 class="card-title">Orders (Open vs Closed)</h3></div>
+            <div class="card-body">
+                <canvas id="ordersChart" style="height:300px;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header"><h3 class="card-title">Customers vs Products</h3></div>
+            <div class="card-body">
+                <canvas id="custProdChart" style="height:300px;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script nonce="@Html.CspNonce()">
+
+    // Doughnut Chart - Open vs Closed Orders
+    var ordersChart = new Chart(document.getElementById('ordersChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Open Orders', 'Closed Orders'],
+            datasets: [{
+                data: [@Model.OpenOrders, @Model.ClosedOrderPercent],
+                backgroundColor: ['#FF6384', '#36A2EB']
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    // Bar Chart - Customers vs Products
+    var custProdChart = new Chart(document.getElementById('custProdChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Customers', 'Products'],
+            datasets: [{
+                label: 'Count',
+                data: [@Model.CustomerCount, @Model.ProductCount],
+                backgroundColor: ['#4BC0C0', '#FFCE56']
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+     fetch('/Dashboard/OrdersByDate?startDate=2025-01-01&endDate=2025-12-31')
+        .then(res => res.json())
+        .then(data => {
+            new Chart(document.getElementById('ordersByDateChart'), {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Orders per Day',
+                        data: data.data,
+                        borderColor: '#36A2EB',
+                        fill: false
+                    }]
+                }
+            });
+        });
+
+    // Top Products
+    fetch('/Dashboard/TopProducts')
+        .then(res => res.json())
+        .then(data => {
+            new Chart(document.getElementById('topProductsChart'), {
+                type: 'bar',
+                data: {
+                    labels: data.topLabels,
+                    datasets: [{
+                        label: 'Top Products',
+                        data: data.topData,
+                        backgroundColor: '#FF6384'
+                    }]
+                }
+            });
+        });
+</script>
+

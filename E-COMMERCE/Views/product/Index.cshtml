@@ -1,0 +1,54 @@
+﻿@model productvm
+
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <form asp-action="create" asp-controller="product" method="post" class="myform" data-aos="fade-up" data-aos-delay="200">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="row gy-4">
+                        <!-- حقل الاسم -->
+                        <div class="col-md-6">
+                            <label for="productname" class="form-label">الاسم</label>
+                            <input type="text" name="productname" id="productname" class="form-control" placeholder="أدخل اسمك" asp-for="productname" />
+                            <span asp-validation-for="productname" class="text-danger"></span>
+                        </div>
+
+                        <!-- حقل البريد الإلكتروني -->
+                        <div class="col-md-6">
+                            <label for="catname" class="form-label">البريد الإلكتروني</label>
+                            <input type="text" name="catname" id="catname" class="form-control" placeholder="اسم الفئةادخل " asp-for="catname" />
+                            <span asp-validation-for="catname" class="text-danger"></span>
+                        </div>
+
+                        <!-- حقل السعر -->
+                        <div class="col-12">
+                            <label for="productprice" class="form-label">سعر المنتج</label>
+                            <input type="number" step="0.01" name="productprice" id="productprice" class="form-control" placeholder="أدخل سعر المنتج" asp-for="productprice" />
+                            <span asp-validation-for="productprice" class="text-danger"></span>
+                        </div>
+
+                        <!-- حقل الكمية -->
+                        <div class="col-12">
+                            <label for="productquntity" class="form-label">الكمية</label>
+                            <input type="number" name="productquntity" id="productquntity" class="form-control" placeholder="أدخل الكمية" asp-for="productquntity" />
+                            <span asp-validation-for="productquntity" class="text-danger"></span>
+                        </div>
+
+                        <!-- زر الإرسال -->
+                        <div class="col-12 text-center">
+                            <input type="submit" value="إرسال" class="btn btn-primary" />
+                        </div>
+                        @Html.DropDownList("Id", (SelectList)ViewBag.data,"ho")
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

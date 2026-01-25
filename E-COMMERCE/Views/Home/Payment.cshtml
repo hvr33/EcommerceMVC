@@ -1,0 +1,7 @@
+﻿@using PayPalCheckoutSdk.Orders
+
+
+<form method="post" asp-action="OnlinePayment" asp-controller="Home">
+    <input type="hidden" name="orderId" value="@Model.Id" />
+    <button type="submit">Pay Now</button>
+</form>

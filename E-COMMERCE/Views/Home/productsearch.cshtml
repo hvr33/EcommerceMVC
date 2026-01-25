@@ -1,0 +1,52 @@
+﻿@model List<Product>
+
+<div class="continer mt-3 mt-3 p-5 ">
+
+    <form asp-action="productsearch" asp-controller="Home" method="get">
+        <div class="row  justify-content-center">
+
+            <div class="col-sm-8">
+                <input type="text" value="" placeholder="search" name="xname" id="xname" class="form-control" />
+
+            </div>
+            <input type="submit" class="col-sm-1 btn btn-primary" value="search"></input>
+        </div>
+    </form>
+</div>
+
+
+
+<section id="services" class="services section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Site Sections</h2>
+        <p>
+            These are the main categories that help visitors easily find the products or services they are looking for.
+
+
+        </p>
+    </div><!-- End Section Title -->
+
+    <div class="container">
+
+        <div class="row gy-4">
+@foreach (var item in Model)
+{
+                <div class="col-xl-4 col-lg-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="service-item d-flex">
+                        <img class="myphoto" src="
+
+upload/@item.Photo" />
+                        <div>
+                            <h4 class="title"><a href="/Home/productcurrent/@item.Id" class="stretched-link">@item.Name</a></h4>
+                            <p class="description">@item.Description</p>
+                        </div>
+                    </div>
+                </div>
+}
+            <!-- End Service Item -->
+
+
+
+

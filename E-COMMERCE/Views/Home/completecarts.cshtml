@@ -1,0 +1,235 @@
+﻿@* @model Order
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@if (TempData["CartError"] != null)
+{
+    <div class="alert alert-warning text-center">
+        @TempData["CartError"]
+    </div>
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="CompleteCarts" asp-controller="Home" method="post" class="p-5 shadow rounded bg-white">
+
+                <h3 class="text-center mb-4 text-primary">إتمام الطلب</h3>
+
+                <!-- الاسم -->
+                <div class="mb-3 position-relative">
+                    <i class="bi bi-person-fill position-absolute" style="top:12px; left:10px;"></i>
+                    @Html.AntiForgeryToken()
+                    <input asp-for="CustomerName" class="form-control ps-5" placeholder="الاسم الكامل" required />
+                    <span asp-validation-for="CustomerName" class="text-danger"></span>
+                </div>
+
+                <!-- الهاتف -->
+                <div class="mb-3 position-relative">
+                    <i class="bi bi-telephone-fill position-absolute" style="top:12px; left:10px;"></i>
+                    @Html.AntiForgeryToken()
+                    <input asp-for="Phone" class="form-control ps-5" placeholder="رقم الهاتف" required />
+
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+
+                <!-- البلد -->
+                <div class="mb-3 position-relative">
+                    <i class="bi bi-flag-fill position-absolute" style="top:12px; left:10px;"></i>
+                    <select asp-for="CountryId" asp-items="ViewBag.Countries" class="form-select ps-5" id="CountryId" required>
+                        <option value="">-- اختر البلد --</option>
+                    </select>
+                    <span asp-validation-for="CountryId" class="text-danger"></span>
+                </div>
+
+                <!-- المحافظة -->
+                <div class="mb-3 position-relative">
+                    <i class="bi bi-geo-alt-fill position-absolute" style="top:12px; left:10px;"></i>
+                    <select asp-for="StateId" asp-items="ViewBag.States" class="form-select ps-5" id="StateId" required>
+                        <option value="">-- اختر المحافظة --</option>
+                    </select>
+                    <span asp-validation-for="StateId" class="text-danger"></span>
+                </div>
+
+                <!-- المدينة -->
+                <div class="mb-3 position-relative">
+                    <i class="bi bi-building position-absolute" style="top:12px; left:10px;"></i>
+                    <select asp-for="CityId" asp-items="ViewBag.Cities" class="form-select ps-5" id="CityId" required>
+                        <option value="">-- اختر المدينة --</option>
+                    </select>
+                    <span asp-validation-for="CityId" class="text-danger"></span>
+                </div>
+
+                <!-- العنوان -->
+                <div class="mb-3 position-relative">
+                    <i class="bi bi-house-fill position-absolute" style="top:12px; left:10px;"></i>
+                    @Html.AntiForgeryToken()
+                    <input asp-for="Address" class="form-control ps-5" placeholder="العنوان بالكامل" required />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <!-- طريقة الدفع -->
+                <div class="mb-3 position-relative">
+                    <i class="bi bi-credit-card-fill position-absolute" style="top:12px; left:10px;"></i>
+                    <select asp-for="Onlinepaid" class="form-select ps-5" required>
+                        <option value="">-- اختر طريقة الدفع --</option>
+                        <option value="false">عند الاستلام</option>
+                        <option value="true">أونلاين</option>
+                       
+                    </select>
+                    <span asp-validation-for="Onlinepaid" class="text-danger"></span>
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button  type="submit" class="btn btn-primary btn-lg">تأكيد الطلب</button>
+                 
+                </div>
+
+            </form>
+          
+
+@section Scripts {
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#CountryId").change(function () {
+            var countryId = $(this).val();
+            $.getJSON('/api/location/GetStates/' + countryId, function (data) {
+                var items = '<option value="">-- اختر المحافظة --</option>';
+                $.each(data, function (i, state) {
+                    items += "<option value='" + state.id + "'>" + state.name + "</option>";
+                });
+                $("#StateId").html(items);
+                $("#CityId").html('<option value="">-- اختر المدينة --</option>');
+            });
+        });
+
+        $("#StateId").change(function () {
+            var stateId = $(this).val();
+            $.getJSON('/api/location/GetCities/' + stateId, function (data) {
+                var items = '<option value="">-- اختر المدينة --</option>';
+                $.each(data, function (i, city) {
+                    items += "<option value='" + city.id + "'>" + city.name + "</option>";
+                });
+                $("#CityId").html(items);
+            });
+        });
+    });
+</script>
+} *@
+@model Order
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@if (TempData["CartError"] != null)
+{
+    <div class="alert alert-warning text-center">
+        @TempData["CartError"]
+    </div>
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <form asp-action="CompleteCarts" asp-controller="Home" method="post" class="p-5 shadow rounded bg-white">
+                @Html.AntiForgeryToken()
+
+                <h3 class="text-center mb-4 text-primary">إتمام الطلب</h3>
+
+                <!-- الاسم -->
+                <div class="mb-3 position-relative">
+                    <i class="bi bi-person-fill position-absolute" style="top:12px; left:10px;"></i>
+                    <input asp-for="CustomerName" class="form-control ps-5" placeholder="الاسم الكامل" required />
+                    <span asp-validation-for="CustomerName" class="text-danger"></span>
+                </div>
+
+                <!-- الهاتف -->
+                <div class="mb-3 position-relative">
+                    <i class="bi bi-telephone-fill position-absolute" style="top:12px; left:10px;"></i>
+                    <input asp-for="Phone" class="form-control ps-5" placeholder="رقم الهاتف" required />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+
+                <!-- البلد -->
+                <div class="mb-3 position-relative">
+                    <i class="bi bi-flag-fill position-absolute" style="top:12px; left:10px;"></i>
+                    <select asp-for="CountryId" asp-items="ViewBag.Countries" class="form-select ps-5" id="CountryId" required>
+                        <option value="">-- اختر البلد --</option>
+                    </select>
+                    <span asp-validation-for="CountryId" class="text-danger"></span>
+                </div>
+
+                <!-- المحافظة -->
+                <div class="mb-3 position-relative">
+                    <i class="bi bi-geo-alt-fill position-absolute" style="top:12px; left:10px;"></i>
+                    <select asp-for="StateId" asp-items="ViewBag.States" class="form-select ps-5" id="StateId" required>
+                        <option value="">-- اختر المحافظة --</option>
+                    </select>
+                    <span asp-validation-for="StateId" class="text-danger"></span>
+                </div>
+
+                <!-- المدينة -->
+                <div class="mb-3 position-relative">
+                    <i class="bi bi-building position-absolute" style="top:12px; left:10px;"></i>
+                    <select asp-for="CityId" asp-items="ViewBag.Cities" class="form-select ps-5" id="CityId" required>
+                        <option value="">-- اختر المدينة --</option>
+                    </select>
+                    <span asp-validation-for="CityId" class="text-danger"></span>
+                </div>
+
+                <!-- العنوان -->
+                <div class="mb-3 position-relative">
+                    <i class="bi bi-house-fill position-absolute" style="top:12px; left:10px;"></i>
+                    <input asp-for="Address" class="form-control ps-5" placeholder="العنوان بالكامل" required />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <!-- طريقة الدفع -->
+                <div class="mb-3 position-relative">
+                    <i class="bi bi-credit-card-fill position-absolute" style="top:12px; left:10px;"></i>
+                    <select asp-for="Onlinepaid" class="form-select ps-5" required>
+                        <option value="">-- اختر طريقة الدفع --</option>
+                        <option value="false">عند الاستلام</option>
+                        <option value="true">أونلاين</option>
+                    </select>
+                    <span asp-validation-for="Onlinepaid" class="text-danger"></span>
+                </div>
+
+                <!-- زرار التأكيد -->
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">تأكيد الطلب</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#CountryId").change(function () {
+                var countryId = $(this).val();
+                $.getJSON('/api/location/GetStates/' + countryId, function (data) {
+                    var items = '<option value="">-- اختر المحافظة --</option>';
+                    $.each(data, function (i, state) {
+                        items += "<option value='" + state.id + "'>" + state.name + "</option>";
+                    });
+                    $("#StateId").html(items);
+                    $("#CityId").html('<option value="">-- اختر المدينة --</option>');
+                });
+            });
+
+            $("#StateId").change(function () {
+                var stateId = $(this).val();
+                $.getJSON('/api/location/GetCities/' + stateId, function (data) {
+                    var items = '<option value="">-- اختر المدينة --</option>';
+                    $.each(data, function (i, city) {
+                        items += "<option value='" + city.id + "'>" + city.name + "</option>";
+                    });
+                    $("#CityId").html(items);
+                });
+            });
+        });
+    </script>
+}

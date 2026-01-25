@@ -1,0 +1,57 @@
+﻿@model E_COMMERCE.ViewModels.ComprehensiveReportViewModel
+
+@{
+    ViewData["Title"] = "التقرير";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>نوع التقرير: <strong>@ViewBag.ReportType</strong></p>
+<p>السنة: <strong>@ViewBag.SelectedYear</strong>, الشهر: <strong>@ViewBag.SelectedMonth</strong></p>
+
+<h4>إجمالي المبيعات: @Model.TotalSales</h4>
+<h4>إجمالي الطلبات: @Model.TotalOrders</h4>
+
+<h5>أفضل المنتجات:</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>المنتج</th>
+            <th>القسم</th>
+            <th>الكمية المباعة</th>
+            <th>الإيرادات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.TopProducts)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.CategoryName</td>
+                <td>@item.QuantitySold</td>
+                <td>@item.Revenue</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h5>أفضل العملاء:</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>العميل</th>
+            <th>عدد الطلبات</th>
+            <th>إجمالي الإنفاق</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model.CustomerStats)
+        {
+            <tr>
+                <td>@customer.CustomerName</td>
+                <td>@customer.OrderCount</td>
+                <td>@customer.TotalSpent</td>
+            </tr>
+        }
+    </tbody>
+</table>
